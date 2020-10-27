@@ -5,7 +5,6 @@ import { WriteResponses, ReadResponse } from '@sap-cloud-sdk/core';
 @Injectable()
 export class BusinessPartnerService {
     //public dummyText = 'Not yet implemented.';
-    private dataSrc = 'http://localhost:3000';
 
     getAllBusinessPartners(): Promise<BusinessPartner[]> {
         return BusinessPartner.requestBuilder()
@@ -18,7 +17,7 @@ export class BusinessPartnerService {
             .filter(
                 BusinessPartner.BUSINESS_PARTNER_CATEGORY.equals('1')
             )
-            .execute({ url: this.dataSrc });
+            .execute({ destinationName: 's4mockserver' });
     }
 
     getBusinessPartnerById(businessPartnerId: string): Promise<BusinessPartner> {
@@ -41,17 +40,13 @@ export class BusinessPartnerService {
                     BusinessPartnerAddress.HOUSE_NUMBER
                 )
             )
-            .execute({
-                url: this.dataSrc
-            });
+            .execute({ destinationName: 's4mockserver' });
     }
 
     createAddress(address: BusinessPartnerAddress): Promise<BusinessPartnerAddress> {
         return BusinessPartnerAddress.requestBuilder()
             .create(address)
-            .execute({
-                url: this.dataSrc
-            });
+            .execute({ destinationName: 's4mockserver' });
     }
 
     buildAddress(requestBody: any, businessPartnerId: string): BusinessPartnerAddress {
@@ -70,17 +65,13 @@ export class BusinessPartnerService {
     updateBusinessPartnerAddress(address: BusinessPartnerAddress): Promise<BusinessPartnerAddress> {
         return BusinessPartnerAddress.requestBuilder()
             .update(address)
-            .execute({
-                url: this.dataSrc
-            });
+            .execute({ destinationName: 's4mockserver' });
     }
 
     deleteBusinessPartnerAddress(businessPartnerId: string, addressId: string): Promise<void> {
         return BusinessPartnerAddress.requestBuilder()
         .delete(businessPartnerId, addressId)
-        .execute({
-          url: this.dataSrc
-        });
+        .execute({ destinationName: 's4mockserver' });
       }
 
       async updateAddreses(businessPartnerAddresses: BusinessPartnerAddress[]): Promise<BusinessPartnerAddress[]> {
@@ -88,9 +79,8 @@ export class BusinessPartnerService {
         const retrieveRequests = businessPartnerAddresses.map(address =>
             BusinessPartnerAddress.requestBuilder().getByKey(address.businessPartner, address.addressId)
           );
-        const [updateChangesetResponse, ...retrieveResponses] = await batch(changeset(...updateRequests), ...retrieveRequests).execute({
-            url: this.dataSrc
-          });
+        const [updateChangesetResponse, ...retrieveResponses] = await batch(changeset(...updateRequests), ...retrieveRequests)
+        .execute({ destinationName: 's4mockserver' });
           return (updateChangesetResponse as WriteResponses).responses.map(response => response.as!(BusinessPartnerAddress));
         //   return retrieveResponses.reduce((addresses, response: ReadResponse) => [...addresses, ...response.as(BusinessPartnerAddress), []);
 
