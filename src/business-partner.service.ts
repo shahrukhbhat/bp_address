@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { batch, BusinessPartner, BusinessPartnerAddress, changeset } from '@sap/cloud-sdk-vdm-business-partner-service';
-import { WriteResponses, ReadResponse } from '@sap-cloud-sdk/core';
+import { WriteResponses, ReadResponse, BatchResponse } from '@sap-cloud-sdk/core';
 
 @Injectable()
 export class BusinessPartnerService {
@@ -81,9 +81,9 @@ export class BusinessPartnerService {
           );
         const [updateChangesetResponse, ...retrieveResponses] = await batch(changeset(...updateRequests), ...retrieveRequests)
         .execute({ destinationName: 's4mockserver' });
-          return (updateChangesetResponse as WriteResponses).responses.map(response => response.as!(BusinessPartnerAddress));
-        //   return retrieveResponses.reduce((addresses, response: ReadResponse) => [...addresses, ...response.as(BusinessPartnerAddress), []);
-
+        //   return (updateChangesetResponse as WriteResponses).responses.map(response => response.as!(BusinessPartnerAddress));
+        return retrieveResponses.reduce((addresses, response: ReadResponse) => [...addresses, response.as(BusinessPartnerAddress)],[]);
+        
         }
 
       buildAddressList(body: any): BusinessPartnerAddress[] {

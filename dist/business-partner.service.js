@@ -54,7 +54,7 @@ let BusinessPartnerService = class BusinessPartnerService {
         const retrieveRequests = businessPartnerAddresses.map(address => cloud_sdk_vdm_business_partner_service_1.BusinessPartnerAddress.requestBuilder().getByKey(address.businessPartner, address.addressId));
         const [updateChangesetResponse, ...retrieveResponses] = await cloud_sdk_vdm_business_partner_service_1.batch(cloud_sdk_vdm_business_partner_service_1.changeset(...updateRequests), ...retrieveRequests)
             .execute({ destinationName: 's4mockserver' });
-        return updateChangesetResponse.responses.map(response => response.as(cloud_sdk_vdm_business_partner_service_1.BusinessPartnerAddress));
+        return retrieveResponses.reduce((addresses, response) => [...addresses, response.as(cloud_sdk_vdm_business_partner_service_1.BusinessPartnerAddress)], []);
     }
     buildAddressList(body) {
         return body.map(address => cloud_sdk_vdm_business_partner_service_1.BusinessPartnerAddress.builder().fromJson(address));
