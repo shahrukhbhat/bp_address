@@ -2797,7 +2797,7 @@
         "affectsGlobalScope": false
       },
       "../src/business-partner.service.ts": {
-        "version": "2387a3ca01e696a1561354cd830a0ea629997096e840488898742c6af5975ff7",
+        "version": "f6248a2ccae4e0dbf7dcf5311de4b70050868ae0a9ee0c23d44e6832c0cf83d1",
         "signature": "d8f245a7209f2f608f60cef30b3b1c0cfc41fd36df14eb50baefc1854cf0df6c",
         "affectsGlobalScope": false
       },
